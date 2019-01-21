@@ -3,6 +3,8 @@ Class Repository
 
 Homework from Wk 1 added on Jan 11 2019
 
+JD: There was no description added for week 1, and the description for week 2 still doesn't meet the standards (a paragraph describing the data)
+
 Homework from Wk 2: added on Jan 18. `summary(anoles)` revealed that many of the variables had been stored as characters instead of factors, so I changed them all to factors.
 *BMB: this is as expected; tidyverse reading functions do this, because in general you don't want to convert variables to factor until they've been cleaned. It's also worth checking that the order of factors makes sense (i.e., don't use the default alphabetical order unless you've decided it's appropriate)*
 
