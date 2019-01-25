@@ -1,4 +1,5 @@
 library(tidyverse)
+library(ggplot2)
 anoles <- read_csv("winchell_evol_phenshifts.csv")
 str(anoles)
 summary(anoles)        # Certain values here are being reported as characters (e.g. column 'context'; whether the
