@@ -1,0 +1,35 @@
+Brendan McEwen
+MMV Problem
+
+Probability of detecting true positive: 1.00
+Probability of detecting false positive: 0.05
+Proportion of population truly infected: 0.01
+
+First Test:
+Hypothetical population of 100 
+100*0.05 = 5 individuals testing FALSE positive
+100*0.01 = 1 individual testing TRUE positive
+1 + 5 = 6 total individuals testing positive
+
+1 true positive / 6 total positives = 0.166667 probability that a positive-testing individual is actually infected
+
+Knowing this, if a friend tested positive I would inform them of the high false-positive rate and advise them to get tested again. Testing positive in a first test would change the prior probability of their infection in the subsequent test from 0.01 to 0.1667:
+
+Second Test:
+Of 100 individuals who test positive in the FIRST test, 
+100*0.1667 = 17 (roughly) individuals testing true positive
+100*0.05 = 5 individuals testing false positive
+17+5 = 22 total individuals testing positive
+17 true positive / 22 total positives = 77% chance of truly being infected if testing positive in first two tests
+
+
+HYPOTHESIS TESTING
+
+With my dataset I would like to evaluate the hypothesis that urbanization promotes local adaptation of limb morphology. 
+
+Anolis cristatellus is a ‘trunk-ground’ ecomorph of Anolis, meaning that it spends time both on vertical and horizontal substrate. These lizards have evolved limb morphology that optimizes spending time perched vertically, then jumping down onto the ground to chase prey. The relatively higher abundance of vertical surface in an urban environment may influence lizards to spend more time in their vertical orientation. This new time budget spent vertically may impose different strains on their limbs. If true, and if the strain is strong enough to reduce fitness in non-optimized individuals, this could select for a new optimum configuration of limb component. 
+
+In order to investigate this potential departure from the ‘natural optimum’, I would first have to generate what I consider to be an optimal morphology in the natural-context Anoles. This would be making an enormous assumption on my part and is a weakness in this analysis, as I am doing this from a restricted sample and have no measure of any of their ecological performance. Thus, I can’t evaluate the actual ‘optimality’ of any of these morphological configurations. Acknowledging that caveat, one way I could try is to take the median (less affected by extreme outliers) length of each limb component of the lizards in natural contexts and construct my hypothetical ‘optimal’ lizard from that. I could also construct a model that finds the least-squares length of each limb component in natural-context lizards and use those measurements instead as the ‘central trend’ morphology. 
+
+Once I have my optimum natural-context morphology model, I could test for whether the morphological ratios of lizards caught in urban areas differ from those in natural contexts and, if so, whether those departures share common characteristics. 
+
