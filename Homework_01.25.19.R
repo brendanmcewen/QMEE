@@ -1,6 +1,9 @@
 library(tidyverse)
 library(ggplot2)
 
+## JD: It would be good to move the cleaning and reading elsewhere if you are happy with it so we can focus on the new stuff
+## You can save and load an .RData file
+
 anoles <- read_csv("winchell_evol_phenshifts.csv")
 
 anoles <- anoles %>% mutate(bodytemp.F = (32 + 1.8*bodytemp.C))   ## Converting to Fahrenheit to help my brain
@@ -31,6 +34,7 @@ anoles$body.condition <- (anoles$weight.g/anoles$svl.mm)*100  ## This more or le
 
 ## Now that we have a body condition metric, I want to see whether lizards differ in their body condition based upon their natural/urban environment
 
+## JD: I liked the green and gray, but you weren't consistent with it.
 (condition_context_box <- ggplot(anoles, aes(context,body.condition, fill=context))+
   geom_boxplot()+
   scale_fill_manual(values=c("forestgreen","gray"))+           ## Want intuitive colors for my boxplot fills
@@ -58,6 +62,8 @@ anoles$body.condition <- (anoles$weight.g/anoles$svl.mm)*100  ## This more or le
 )
 ## These relationships are uninspiring, but a slight negative relationship could potentially be explained by the fact that it's harder to heat larger objects up at a fixed energy input
 
+## JD: What temp do you think they _want_?
+
 ## Let's see if higher mass of a lizard is associated with a greater perch diameter:
 tree_anoles <- filter(anoles, perch == "tree") ## subsetting to only include lizards found on trees
 
@@ -71,6 +77,7 @@ tree_anoles <- filter(anoles, perch == "tree") ## subsetting to only include liz
   geom_boxplot()
 )
 
+## JD: HOw many species are we talking about here? Are there other confounders to think about?
 
 ## I wonder if larger lizards are found closer or farther from the ground compared to small lizards? Larger lizards might perceive themselves safer in a given 
 ## environment than a smaller lizard would, thus I predict larger lizards to spend more time close to the ground (and thus be captured closer to the ground)
@@ -105,6 +112,10 @@ tree_anoles <- filter(anoles, perch == "tree") ## subsetting to only include liz
 )        ## It seems that lizards caught on concrete substrates tend to have a slightly higher internal temperature. This is odd as I would have predicted metal-dwelling lizards
          ## To be hotter, unless those hotter surfaces become intolerable and the lizards avoid them. 
 
-
 ## I keep getting error messages that I'm removing rows containing non-finite values. What could be the source of this?
 
+## JD: Good job for worrying. I don't know the answer yet.
+## If it were me, I would start with the parsing failures (readr is suggesting you run problems())
+## ggplot is also report NAs; I don't know if those are somehow the cause of your non-finite values.
+
+## Grade: good (2/3)
