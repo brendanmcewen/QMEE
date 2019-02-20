@@ -25,3 +25,13 @@ dwplot(anole_femurs)
 ## Coefficient plot corroborates the notion that while SVL has a larger say in determining femur length, context:urban 
 ##    also has a positive influence. The 95% CI of contexturban does not overlap with zero, does this allow us to infer an effect
 ##    of urbanization on femur length in these lizards?
+
+##Now time for a diagnostic plot:
+par(mfrow=c(2,2))
+plot(anole_femurs)
+# Residuals vs fitted plot shows the 'trend' line approximately following the zero line in the residuals, which 
+#   I assume to be a good thing?
+## QQNorm plot shows most of the data following along the normality line, with some slight departures at the tails
+##  Many QQNorm plots I see look like this, is this an okay amount of deviation from normality?
+## The scale-location plot shows no real relationship, with perhaps a slight positive linear uptick at the end
+## Our Residuals vs Leverage plot doesn't show anything that looks too crazy
