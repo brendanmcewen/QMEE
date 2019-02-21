@@ -17,8 +17,8 @@ summary(anole_femurs)
 ##      SVL as a fixed effect to control for the variance attributable to how large the lizard is overall.
 ## This brings us into GLMM territory:
 library(lme4)
-anole_femurs_2 <- lmer(FEM ~ context + svl.mm + (1|Site), family="gaussian", data=anoles)
-## This crashed my code, and then JD said not to worry about controlling 
+anole_femurs_2 <- glmer(FEM ~ context + svl.mm + (1|Site), family="gaussian", data=anoles)
+## This broke the model, and then JD said not to worry about doing this as a GLMM for now
 
 ## Let's do a dot-whisker plot of the linear model that did work:
 dwplot(anole_femurs)
