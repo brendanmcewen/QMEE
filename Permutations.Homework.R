@@ -37,6 +37,8 @@ obs <- mean(spiders[spiders$Site_Type=="Wet","Prey.Carcasses"])-
 ## append the observed value to the list of results
 res <- c(res,obs)
 
+## JD: How would you calculate a permutation P value here/
+
 ## Now histogramming the results:
 hist(res,col="gray",las=1,main="")
 abline(v=obs,col="red")
@@ -57,3 +59,4 @@ levels(spiders$Site_Type)
 mean(spiders$Prey.Carcasses[spiders$Site_Type=="Arid"])
 mean(spiders$Prey.Carcasses[spiders$Site_Type=="Wet"])
 
+## JD: Grade 2/3 (Good)
