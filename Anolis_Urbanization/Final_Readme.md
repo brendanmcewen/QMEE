@@ -8,7 +8,7 @@ The second part of our exploring the urban environment involved looking at therm
 Using Ben's suggestion in our presentation marking notes, we also constructed a GAM using time of day as a smoothing component. Once again, we still observe clear differences across habitat types. It seems as if these urban habitats do truly exhibit the 'hotspot' effects that we've come to associate with urbanization.
 
 
-Once we had some basid descriptive stuff tacked down for the environmental variables, we thought it would be informative to perform a PCA on these data. We first constructed a PCA to examine the Abiotic factors of the environments (i.e. thermal properties).
+Once we had some basic descriptive stuff tacked down for the environmental variables, we thought it would be informative to perform a PCA on these data. We first constructed a PCA to examine the Abiotic factors of the environments (i.e. thermal properties).
 We then constructed a second PCA to examine the biotic responses, namely morphometrics of the lizards. We found that sites differed in PC1 for both of these PCAs, corroborating both our past and forthcoming findings. It should be noted that the Abiotic PCA (eg. thermal) does not account for the effect of time of day.
 
 Once we finished with the biotic response (morphometric) PCA, we thought it would be useful to attempt to reproduce Winchell et al.'s analysis. Their paper examined the morphometric response variables in the form of single-trait ANCOVA. We successfully replicated their analysis, finding that the six main limb components (radius, ulna, humerus, femur, tibia, fibula) were all longer at urban sites even after accounting for differences in Snout-Vent Length. 
