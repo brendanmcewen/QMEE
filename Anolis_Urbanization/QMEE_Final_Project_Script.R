@@ -7,7 +7,8 @@ library(tidyr)
 library(dplyr)
 library(corrplot)
 
-setwd("~/Eco Stats (BIO 708)/QMEE GitHub/Anolis_Urbanization")
+## BMB: comment this out!
+## setwd("~/Eco Stats (BIO 708)/QMEE GitHub/Anolis_Urbanization")
 source("./MLM_Dworkin.R") ## Need this for the shapeRsq() function for Multivariate
 anoles.PCA <- read.csv("Anoles.na.csv") # Separate file with the NAs omitted for our PCA-implicated variables
 anoles <- readRDS("anoles_clean.RData")
@@ -20,14 +21,25 @@ head(anoles)
 ## Perch plotting: What substrates are used in each context? What materials are lizards in urban habitats interacting with 
 ## That anoles in natural settings don't interact with, and how frequently are lizards found on these substrates?
 perches$Perch <- factor(perches$Perch, levels=c("Tree", "Metal", "Concrete", "Other"))
+## BMB: do this (factor orderin) upstream during data cleaning/organization?
+
 perch.plot <- ggplot(data=perches, aes(Perch, Count, fill=Perch))+
   geom_col()+
   facet_wrap(~Context, nrow=1)+
   scale_fill_manual(values=c(Tree="forestgreen", Metal="grey46", Concrete="gray90", Other="gray2"))+
   theme_bw()
 perch.plot
+## BMB: Why not side by-sid
 
-
+(perch.plot2 <- ggplot(data=perches, aes(Perch, Count, fill=Perch,
+                                       alpha=Context))
+    + geom_col(position="dodge")
+    + scale_fill_manual(values=c(Tree="forestgreen", Metal="grey46", Concrete="gray90", Other="gray2"))
+    + scale_alpha_manual(values=c(0.9,0.5))
+    + theme_bw()
+)
+## this would take more side-by-side tweaking/legend adjustment, but you
+## get the idea
 
 ## Thermal Stuff: Are anoles in urban settings experiencing hotspot effects?
 ## Temperature Figures : 
@@ -36,7 +48,8 @@ perch.plot
 ## Ambient Temp Fig
 ## First want to see if just general areas are warmer than each other
 temp.fig.ambient <- ggplot(data=anoles, aes(local.time.decimal, ambient.temp.C, col=context))+
-  geom_smooth()+
+    geom_smooth()+
+    stat_sum(pch=1)+
   labs(title="Ambient Temperature Across Time of Day", x="Time of Day", y="Ambient Temp Celsius")+
   scale_color_manual(values=c(natural="forestgreen", urban="gray45"))+
   theme_bw()+
@@ -45,14 +58,19 @@ temp.fig.ambient <- ggplot(data=anoles, aes(local.time.decimal, ambient.temp.C, 
         axis.title.x = element_text(size=16),
         axis.text.x = element_text(size=14),
         axis.title.y = element_text(size=16),
-        axis.text.y = element_text(size=14))
+        axis.text.y = element_text(size=14))+
+    scale_size(breaks=1:3)
 temp.fig.ambient
+## BMB: always include the raw data unless you have a good reason not to
+
 # Model:
 anoles$TC1 <- cos(2*pi*anoles$local.time.decimal/24)
 anoles$TC2 <- sin(2*pi*anoles$local.time.decimal/24)
 ambient.full.mod <- lm(ambient.temp.C ~ TC1 + TC2 + context, data=anoles)
 summary(ambient.full.mod)
 plot(ambient.full.mod) ## Looks pretty good, some deviation from normality and a couple high-leverage points but nothing outrageous
+## BMB: I would definitely worry about the scale-location plot here
+## (distinct decrease in variance with increasing fitted value)
 dwplot(ambient.full.mod)
 
 
