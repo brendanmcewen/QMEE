@@ -88,12 +88,23 @@ temp.fig.perch <- ggplot(data=anoles, aes(local.time.decimal, perch.temp.C, col=
         axis.title.y = element_text(size=16),
         axis.text.y = element_text(size=14))
 temp.fig.perch
+## BMB:  see previous comments about need for data points
+## also: don't repeat all the theme() stuff -- define it once and re-use
 # Model:
 anoles$TC1 <- cos(2*pi*anoles$local.time.decimal/24)
 anoles$TC2 <- sin(2*pi*anoles$local.time.decimal/24)
 perchtemp.full.mod <- lm(perch.temp.C ~ TC1 + TC2 + context, data=anoles)
 summary(perchtemp.full.mod)
 plot(perchtemp.full.mod) # Points on scale-location plot look crazy, is this normal?
+## BMB: this is fine -- has to do with a small discrete number of perch temps
+library(viridisLite)
+library(broom)
+aa <- augment(perchtemp.full.mod)
+ggplot(aa, aes(.fitted,sqrt(abs(.std.resid)),colour=perch.temp.C))+
+    geom_point()+
+    geom_line(aes(group=perch.temp.C))+
+    scale_colour_viridis_c() + theme_bw()
+    
 dwplot(perchtemp.full.mod) # coefficients here are stronger than in the ambient temperature model
 
 
@@ -124,6 +135,7 @@ library(mgcv)
 temp.gam <- gam(bodytemp.C ~ context + s(local.time.decimal, by=context), data=anoles) # smoothing by time of day and breaking this smoothing up into urban vs natural components
 summary(temp.gam) # clear difference in our parametric coefficient test, with both of our smoothing terms being significant. 
 ## For what it's worth, the urban smoothing component had a much higher F-value. I'm not entirely sure how to interpret this?
+## BMB: it means the urban pattern is much farther from a constant value.
 
 
 ## Principal Component Analysis: Urbanization Index & Biotic Response
@@ -198,10 +210,14 @@ ggplot(anoles.PCA, aes(context, BPC2, fill = context)) +
   geom_boxplot() + 
   theme_classic()
 
+## BMB: if you want to distinguish these in multiple dims you can also try discriminant analysis
+
 #Linear Model:
 lm.Biotic.BPC1 <- lm(BPC1 ~ context, data = anoles.PCA)
 summary(lm.Biotic.BPC1) #P < 0.001
 plot(lm.Biotic.BPC1) ## Not quite sure how to interpret these bimodal distributions in the diagnostic plots,
+## BMB: there are only two contexts!
+
 ## But the QQ-plot didn't look too bad
 lm.Biotic.BPC2 <- lm(BPC2 ~ context, data = anoles.PCA)
 summary(lm.Biotic.BPC2)
@@ -216,7 +232,7 @@ plot(lm.Biotic.BPC2)
 
 (PC_Urb_Cor <- cor.test(anoles.PCA$APC1[anoles.PCA$context=="urban"], anoles.PCA$BPC1[anoles.PCA$context=="urban"]))
 ## Neither are correlated
-
+## BMB: please say CLEARLY correlated
 
 ## Plotting the Urbanization PC1 against the Biotic Response PC1 just to see what it looks like
 ggplot(data = anoles.PCA) +
@@ -282,6 +298,8 @@ anoles <- anoles%>%
   drop_na(RAD,ULN,HUM,FEM,FIB,TIB) ## This fixed it
 summary(anoles)
 
+## BMB: please try to make a function to do this rather than
+##  repeating code ...
 ## Forelimbs:
 
 # 1. Radius
@@ -297,7 +315,6 @@ rad.fig <- ggplot(data=anoles, aes(context, log(RAD), fill=context))+
         axis.title.y = element_text(size=16),
         axis.text.y = element_text(size=14))
 rad.fig
-
 
 # 2. Ulna
 uln.fig <- ggplot(data=anoles, aes(context, log(ULN), fill=context))+
@@ -402,7 +419,9 @@ pairs(multmorph[, 5:10],
 
 M <- cor(multmorph[,5:10])
 corrplot(M, method="circle") # All of these correlations are the same (high) values. 
-#   This is not a useful mode of visualization.
+                                        #   This is not a useful mode of visualization.
+## BMB: try corrplot.mixed instead ...
+corrplot.mixed(M, lower="ellipse",upper="number") # All of these correlations are the same (high) values. 
 
 scatterplotMatrix( ~ RAD + ULN + HUM + FEM + TIB + FIB | context, 
                    ellipse = TRUE, data = multmorph, gap = 0,
@@ -414,6 +433,7 @@ det(cov(multmorph[, 5:10]))
 prod(eigenvals)
 ## These two numbers are identical! To our untrained eyes they appear quite small, but Ian's notes say that
 ##  an eigenval of 1e-10 was 'not vanishingly small' so perhaps these (at 3 orders of magnitude larger) are okay?
+## BMB: this product is less generally useful than Ian suggested ...
 
 sum(eigenvals) # This sum is also larger than the one seen in Ian's lecture notes. I imagine that this is largely
 ## to do with the number of variables being considered, also scale-dependent, and that we 
@@ -439,6 +459,7 @@ Manova(mlm2, type="II")
 ## across lizards captured at natural vs urban sites! This is exciting, I'm glad I (superficially at least) got this to work
 
 coef(mlm2) # Actually assigned a higher coefficient to urbanization than SVL for some limb components, that's crazy
+## BMB: are your svl.mm values scaled? otherwise they won't be comparable
 shapeRsq(mlm2) # This number is so high that I don't actually trust it
 sum(diag(cov(mlm2$fitted)))/sum(diag(cov(multmorph[,5:10]))) # this number is vastly different from that calculated in shapeRsq()
 #   versus it being the same in Ian's notes. 
