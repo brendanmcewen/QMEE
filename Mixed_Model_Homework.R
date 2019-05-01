@@ -12,12 +12,12 @@ with(anoles, table(Site, context))
 ## All three of our sites have comparable captures of lizards in both habitat contexts. 
 ## Three sites isn't a sufficient number of sites to include  as a random effect, right? And the observations at these sites are not balanced
 ## JD told me to 'try it anyway and report what happens', so that's what I'll do!
+## JD: I am absolutely denying that I did that. Or at least claiming that there should be more context ☺.
 
 fem.mixed.1 <- lmer(FEM ~ context + svl.mm + (1|Site), data=anoles)  
 # femur length explained by context and SVL, site as a random effect influencing intercept
 ## Gives a 'Singular Fit' message
 summary(fem.mixed.1)
-
  
 # Now trying femurs explained by context and SVL with site as a random factor influencing our slope for context.
 # This would mean that if there is an adaptive shift in femur length in response to urbanization, it's occurring at different magnitudes across our sites?
@@ -39,10 +39,13 @@ summary(fem.mixed.3)
 ## (1|Site), (context|Site), (svl.mm|Site). However, we have been advised to avoid implementing a random effect with less than 5 (and ideally 10) levels. 
 ##    My Site factor only has 3 levels. Thus, I think in the grand scheme of things it is not appropriate to include Site as a random effect
 
-
 ## For the Singular Fit issue: Is this because I might only have one observation at a given SVL in a particular level of Site? I.e. 61mm may only have one observation at San Juan. Would this
+## JD: If you did it right, the number of observations per SVL shouldn't have anything to do with it. You seem to be using svl.mm properly as a quantitative variable
+
 ##    cause a perfect 0/1 in the variance/covariance matrices? The first advised method to eliminate Singular Fit problems is to simplify the model.
 ##    This is consistent with my inclination to not include ANY random effects due to the low number of levels in my potential random effect factor.
+
+## JD: Yes, if including Site as a RE doesn't work, you're probably best off including it as a FE (and making this a caveat in your publications).
 isSingular(fem.mixed.1)
 # TRUE
 isSingular(fem.mixed.2)
@@ -51,5 +54,8 @@ isSingular(fem.mixed.3)
 # TRUE
 
 ## Would modifying our nAGQ= argument change things?
-fem.mixed.1 <- lmer(FEM ~ context + svl.mm + (1|Site), nAGQ=25, data=anoles)
+## fem.mixed.1 <- lmer(FEM ~ context + svl.mm + (1|Site), nAGQ=25, data=anoles)
 ## 'extra arguments disregarded' Nope, that doesn't work. 
+## JD: nAGQ is only a thing for _generalized_ models
+
+## Grade 2.25/3 V. Good

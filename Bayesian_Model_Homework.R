@@ -27,7 +27,6 @@ anolefemurs <- with(anoles, jags(model.file='Bayes_Homework_BUG.bug'
                                  , inits = NULL
 ))
 
-
 library(dotwhisker)
 print(anolefemurs)
 ## print(dwplot(anolefemurs)) ## Error: 'Invalid Length Argument'
