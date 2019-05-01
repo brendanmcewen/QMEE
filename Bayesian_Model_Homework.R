@@ -11,7 +11,6 @@ summary(lm(FEM~context, data=anoles)) # yields t = 4.088, p =5.5e-05: lizards fr
 ## Fit Linear Model Using bayesglm():
 summary(bayesglm(FEM~context, data=anoles)) # yields similar results
 
-
 ## Lets set up our JAGS:
 ## Need to transform context (urban vs natural, categorical) into a numeric
 
@@ -31,10 +30,19 @@ anolefemurs <- with(anoles, jags(model.file='Bayes_Homework_BUG.bug'
 
 library(dotwhisker)
 print(anolefemurs)
-print(dwplot(anolefemurs)) ## Error: 'Invalid Length Argument'
+## print(dwplot(anolefemurs)) ## Error: 'Invalid Length Argument'
+## JD: Please comment things out if they're not working
+
 plot(anolefemurs) ##The 80% confidence interval for ma does not appear to intersect with zero, but I don't know how to acquire a 95% CI for ma.
+
+## JD: The 95% CI is the thing that goes from the 2.5% quantile to the 97.5% quantile in your printout
+
 traceplot(anolefemurs)
 ## My traceplots seem pretty uniform, a couple of the lines appear to be a bit longer than the others in some of them but to my 
 ##  un-trained eye this doesn't seem alarming. 
+## JD: Looks fine to me, too.
+
 ## While I'm not 100% sure how to directly compare the frequentist models to my Bayesian model, it seems that the Bayesian model attributes an effect of
 ##    urban/natural context on femur length in these lizards (based on ma's 80% CI). This is in agreement with the linear models atop the script.
+
+## Grade 2/3 (good)
