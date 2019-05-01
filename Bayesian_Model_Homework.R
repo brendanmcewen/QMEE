@@ -29,8 +29,20 @@ anolefemurs <- with(anoles, jags(model.file='Bayes_Homework_BUG.bug'
 
 library(dotwhisker)
 print(anolefemurs)
-## print(dwplot(anolefemurs)) ## Error: 'Invalid Length Argument'
+
 ## JD: Please comment things out if they're not working
+## print(dwplot(anolefemurs)) ## Error: 'Invalid Length Argument'
+
+## BMB: solution to the problem. Need the broom.mixed version
+library(broom.mixed)
+dwplot(anolefemurs)
+## or better:
+
+library(dplyr)
+dw <- tidy(anolefemurs) %>% filter(term!="int") %>% dwplot()
+dw + geom_vline(xintercept=0, lty=2)
+
+
 
 plot(anolefemurs) ##The 80% confidence interval for ma does not appear to intersect with zero, but I don't know how to acquire a 95% CI for ma.
 
