@@ -45,6 +45,8 @@ perch.plot
 ## Temperature Figures : 
 
 
+## JD: Work on point size scaling; more natural to have area be proportional
+## Also work on color palette …
 ## Ambient Temp Fig
 ## First want to see if just general areas are warmer than each other
 temp.fig.ambient <- ggplot(data=anoles, aes(local.time.decimal, ambient.temp.C, col=context))+
@@ -71,9 +73,12 @@ summary(ambient.full.mod)
 plot(ambient.full.mod) ## Looks pretty good, some deviation from normality and a couple high-leverage points but nothing outrageous
 ## BMB: I would definitely worry about the scale-location plot here
 ## (distinct decrease in variance with increasing fitted value)
+
+## JD: It would be great to have a reference line at β=0.
+## Also: how are these scaled? Do you think they are comparable values?
 dwplot(ambient.full.mod)
 
-
+## JD: why does it cover a different time range (no afternoon in forest)?
 ## PERCH TEMP FIGURE
 ## Zooming in to the substrate level, are the surfaces that these lizards are choosing to occupy warmer in urbanized areas?
 temp.fig.perch <- ggplot(data=anoles, aes(local.time.decimal, perch.temp.C, col=context))+
@@ -91,12 +96,14 @@ temp.fig.perch
 ## BMB:  see previous comments about need for data points
 ## also: don't repeat all the theme() stuff -- define it once and re-use
 # Model:
+## JD: And really don't define TCs more than once
 anoles$TC1 <- cos(2*pi*anoles$local.time.decimal/24)
 anoles$TC2 <- sin(2*pi*anoles$local.time.decimal/24)
 perchtemp.full.mod <- lm(perch.temp.C ~ TC1 + TC2 + context, data=anoles)
 summary(perchtemp.full.mod)
 plot(perchtemp.full.mod) # Points on scale-location plot look crazy, is this normal?
 ## BMB: this is fine -- has to do with a small discrete number of perch temps
+## JD: Accidental art!
 library(viridisLite)
 library(broom)
 aa <- augment(perchtemp.full.mod)
@@ -106,7 +113,7 @@ ggplot(aa, aes(.fitted,sqrt(abs(.std.resid)),colour=perch.temp.C))+
     scale_colour_viridis_c() + theme_bw()
     
 dwplot(perchtemp.full.mod) # coefficients here are stronger than in the ambient temperature model
-
+## JD: And a bigger relative effect of context
 
 ## Body Temp Figure
 temp.fig.body <- ggplot(data=anoles, aes(local.time.decimal, bodytemp.C, col=context))+
@@ -123,11 +130,14 @@ temp.fig.body <- ggplot(data=anoles, aes(local.time.decimal, bodytemp.C, col=con
 temp.fig.body
 ## For future analyses, can we extrapolate the natural curve to view across the same time frame as urban?
 # Model:
+
+## JD: The repetition is having serious impacts on readability
 anoles$TC1 <- cos(2*pi*anoles$local.time.decimal/24)
 anoles$TC2 <- sin(2*pi*anoles$local.time.decimal/24)
 bodytemp.full.mod <- lm(bodytemp.C ~ TC1 + TC2 + context, data=anoles)
 summary(bodytemp.full.mod)
 plot(bodytemp.full.mod) ## The QQ plot on this one is the most suspect. How bad is this?
+## JD: Doesn't bother me. Looks more like discreteness than serious problems
 dwplot(bodytemp.full.mod) ## Coefficient for urbanization closer to the higher value seen in the perch temperature model
 
 ## In the grading for our presentation, BMB suggested we do a GAM to account for time differences. 
@@ -233,6 +243,8 @@ plot(lm.Biotic.BPC2)
 (PC_Urb_Cor <- cor.test(anoles.PCA$APC1[anoles.PCA$context=="urban"], anoles.PCA$BPC1[anoles.PCA$context=="urban"]))
 ## Neither are correlated
 ## BMB: please say CLEARLY correlated
+## JD: The sign of the correlation is not clear ☺
+## JD: Or even, correlations are small (based on CIs with a standard of 0.25 or something)
 
 ## Plotting the Urbanization PC1 against the Biotic Response PC1 just to see what it looks like
 ggplot(data = anoles.PCA) +
